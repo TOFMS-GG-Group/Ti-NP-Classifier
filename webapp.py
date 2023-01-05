@@ -219,7 +219,7 @@ if file_details["proceed"]:
 
                 fig.update_layout(plot_bgcolor = "white")
                 fig1.update_layout(plot_bgcolor='black')
-                fig1.update_layout(width=600, height=400, margin=dict(l=10, r=10, b=10, t=10))
+                fig1.update_layout(width=600, height=400, margin=dict(l=50, r=10, b=30, t=10))
                 fig1.update_xaxes(showticklabels=True).update_yaxes(showticklabels=True)
                 st.plotly_chart(fig1)
 
