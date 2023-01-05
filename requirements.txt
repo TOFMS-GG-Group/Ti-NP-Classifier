@@ -1,0 +1,9 @@
+streamlit
+Pycharm (or any other IED)
+pandas
+matplotlib
+openpyxl
+sklearn
+psynlig
+scikitlearn
+seaborn
