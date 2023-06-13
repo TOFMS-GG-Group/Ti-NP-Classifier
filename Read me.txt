@@ -6,4 +6,4 @@ Steps
 4. Import all the libraries needed and install the packages.
 5. Once you have running webapp, drag or upload the files that you want to classify.
 6. A csv or an excel file where mass is defined in attograms can be used for the current program or it can be changed by the user if needed.
-7. The user can set the XD_mass (particle-type detection limit in mass) to classify the particles.  For the neat suspension data provided, the X_D,Ti,Ti-Nb value of 9320 ag can be used.  This X_D value is calculated based on a Ti:Nb ratio of 300:1
+7. The user can set the XD_mass (detection limit mass) to classify the particles.

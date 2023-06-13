@@ -9,11 +9,11 @@ sns.set_theme()
 import plotly.express as px
 import xarray as xr
 
-st.title("Titanium ENPs and NNPs Mineral types classifier.")
+st.title("Titanium engineered and natural particle types classifier.")
 st.write("---" * 134)
 
 ''
-@st.cache
+@st.cache_data
 def convert_df(df):
     return df.to_csv().encode('utf-8')
 
@@ -67,10 +67,10 @@ def classifiers(dataframe,Xd):
         if row["Ti"] > 0:
             if row["Ti"] > Xd and (row["Fe"] == 0 and row["Al"] == 0 and
                                            row["Mn"] == 0 and row["Nb"] == 0 and row["La"] == 0):
-                     result_classify.append("ENP")
+                     result_classify.append("E171")
             elif 0 < row["Ti"] < Xd and (row["Fe"] == 0 and row["Al"] == 0 and
                                            row["Mn"] == 0 and row["Nb"] == 0 and row["La"] == 0):
-                     result_classify.append("unc smNP")
+                     result_classify.append("unc sm-Ti")
 
             elif row["Ti"] > 0:
                 if (row["Fe"] / row["Ti"]) > 10 and row["La"] == 0:
@@ -86,7 +86,7 @@ def classifiers(dataframe,Xd):
                 elif row["La"] > 0 and row["Mn"] == 0:
                     result_classify.append("Rutile")
                 else:
-                    result_classify.append("unc mmNP")
+                    result_classify.append("unc mm-Ti")
 
             else:
                 result_classify.append("unclassified")
@@ -114,7 +114,7 @@ if file_details["proceed"]:
                 # st.write(filtered)
                 classifiedres = classifiers(
                     dataframe=dataframe[['Mg', 'Al', 'Ti', 'V', 'Mn',
-                                         'Fe', 'Cu', 'Zn', 'Y', 'Zr',
+                                         'Fe', 'Y', 'Zr',
                                         'Nb', 'La', 'Ce', 'Ta', ]], Xd=PartTypeXD)
 
                 classified_combined = pd.concat([dataframe, pd.DataFrame(classifiedres, columns=["classification"])],
@@ -125,25 +125,25 @@ if file_details["proceed"]:
                 ####### PIE chart#################
                 st.write("All NPs including Non-Ti NPs")
 
-                enp = classified_combined[classified_combined["classification"] == "ENP"]["classification"].count()
+                enp = classified_combined[classified_combined["classification"] == "E171"]["classification"].count()
                 Rutile = classified_combined[classified_combined["classification"] == "Rutile"][
                     "classification"].count()
                 Biotite = classified_combined[classified_combined["classification"] == "Biotite"][
                     "classification"].count()
                 Ilmenite = classified_combined[classified_combined["classification"] == "Ilmenite"][
                     "classification"].count()
-                uncsmNP = classified_combined[classified_combined["classification"] == "unc smNP"][
+                uncsmNP = classified_combined[classified_combined["classification"] == "unc sm-Ti"][
                     "classification"].count()
                 unclassified = classified_combined[classified_combined["classification"] == "unclassified"][
                     "classification"].count()
                 unclassifiedmmNP = \
-                    classified_combined[classified_combined["classification"] == "unc mmNP"][
+                    classified_combined[classified_combined["classification"] == "unc mm-Ti"][
                         "classification"].count()
                 nonTiNPs = classified_combined[classified_combined["classification"] == "non Ti NPs"][
                     "classification"].count()
 
-                st.code(f"ENP:{enp},Rutile:{Rutile},Ilmenite:{Ilmenite}, Biotite:{Biotite}")
-                st.code(f"unc smNP:{uncsmNP}, unc mmNP:{unclassifiedmmNP}, non Ti NPs:{nonTiNPs}, unclassified:{unclassified}")
+                st.code(f"E171:{enp},Rutile:{Rutile},Ilmenite:{Ilmenite}, Biotite:{Biotite}")
+                st.code(f"unc sm-Ti:{uncsmNP}, unc mm-Ti:{unclassifiedmmNP}, non Ti NPs:{nonTiNPs}, unclassified:{unclassified}")
 
                 # st.download_button(
                 #     label="Download result as csv file",
@@ -152,7 +152,7 @@ if file_details["proceed"]:
                 #     mime='text/csv',
                 # )
 
-                labels = ['unclassified','Rutile','Ilmenite','Biotite', 'ENP', 'unc smNP', 'unc mmNP', 'non Ti Nps']
+                labels = ['unclassified','Rutile','Ilmenite','Biotite', 'E171', 'unc sm-Ti', 'unc mm-Ti', 'non Ti Nps']
                 sizes = [unclassified, Rutile, Ilmenite, Biotite, enp, uncsmNP, unclassifiedmmNP, nonTiNPs]
 
                 fig = go.Figure(data=[go.Pie(labels=labels, values=sizes, textinfo='label+percent',
@@ -163,24 +163,24 @@ if file_details["proceed"]:
 
                 #######___only__Ti___NP___######
                 st.write("Ony Ti containing Nano-Particles")
-                enp2 = classified_combined[classified_combined["classification"] == "ENP"]["classification"].count()
+                enp2 = classified_combined[classified_combined["classification"] == "E171"]["classification"].count()
                 Rutile2 = classified_combined[classified_combined["classification"] == "Rutile"][
                     "classification"].count()
                 Biotite2 = classified_combined[classified_combined["classification"] == "Biotite"][
                     "classification"].count()
                 Ilmenite2 = classified_combined[classified_combined["classification"] == "Ilmenite"][
                     "classification"].count()
-                uncsmNP2 = classified_combined[classified_combined["classification"] == "unc smNP"][
+                uncsmNP2 = classified_combined[classified_combined["classification"] == "unc sm-Ti"][
                     "classification"].count()
                 unclassified2 = classified_combined[classified_combined["classification"] == "unclassified"][
                     "classification"].count()
                 unclassifiedmmNP2 = \
-                    classified_combined[classified_combined["classification"] == "unc mmNP"][
+                    classified_combined[classified_combined["classification"] == "unc mm-Ti"][
                         "classification"].count()
 
-                st.code(f"ENP:{enp2},Rutile:{Rutile2},Ilmenite:{Ilmenite2}, Biotite:{Biotite2}")
+                st.code(f"E171:{enp2},Rutile:{Rutile2},Ilmenite:{Ilmenite2}, Biotite:{Biotite2}")
                 st.code(
-                    f"unc smNP:{uncsmNP2}, unc mmNP:{unclassifiedmmNP2}, unclassified:{unclassified2}")
+                    f"unc sm-Ti:{uncsmNP2}, unc mm-Ti:{unclassifiedmmNP2}, unclassified:{unclassified2}")
 
                 st.download_button(
                     label="Download result",
@@ -189,7 +189,7 @@ if file_details["proceed"]:
                     mime='text/csv',
                 )
 
-                labels = ['unclassified', 'Rutile', 'Ilmenite', 'Biotite', 'ENP', 'smNP', 'unc mmNP']
+                labels = ['unclassified', 'Rutile', 'Ilmenite', 'Biotite', 'E171', 'sm-Ti', 'unc mm-Ti']
                 sizes = [unclassified2, Rutile2, Ilmenite2, Biotite2, enp2, uncsmNP2, unclassifiedmmNP2]
                 # PIE chart
                 fig = go.Figure(data=[go.Pie(labels=labels, values=sizes, textinfo='label+percent',
@@ -202,13 +202,11 @@ if file_details["proceed"]:
 
                 st.write("Density Heat map")
                 mass_cols = (dataframe[['Mg', 'Al', 'Ti',
-                                            'V', 'Mn', 'Fe',
-                                            'Cu', 'Zn', 'Y',
+                                            'V', 'Mn', 'Fe', 'Y',
                                             'Nb', 'La', 'Ce',
                                             'Zr', 'Ta']])
                 mass_cols = (dataframe[['Mg', 'Al', 'Ti',
-                                            'V', 'Mn', 'Fe',
-                                            'Cu', 'Zn', 'Y',
+                                            'V', 'Mn', 'Fe','Y',
                                             'Nb', 'La', 'Ce',
                                             'Zr', 'Ta']])
                 fig1 = px.imshow(mass_cols, origin='upper', zmin=0,
@@ -226,8 +224,7 @@ if file_details["proceed"]:
                 ###########___Bubble_heatMap_____############
                 st.write("Heatmap on sns")
                 from matplotlib import pyplot as plt
-                import pandas as pd
-                from sklearn.datasets import load_wine as load_data
+                import pandas as pd 
                 from psynlig import plot_correlation_heatmap
 
                 plt.style.use('default')
@@ -240,8 +237,7 @@ if file_details["proceed"]:
 
 
                 selected_cols = (dataframe[['Mg', 'Al', 'Ti',
-                                            'V', 'Mn', 'Fe',
-                                            'Cu', 'Zn', 'Y',
+                                            'V', 'Mn', 'Fe', 'Y',
                                             'Zr', 'Nb', 'La', 'Ce',
                                             'Ta']])
                 st.write(selected_cols)
